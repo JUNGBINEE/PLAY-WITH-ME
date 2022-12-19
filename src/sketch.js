@@ -20,6 +20,7 @@ const BLACK_FREQ={
 let whiteKeyBoards = [];
 let blackKeyBoards = [];
 let osc = new p5.Oscillator('sine');
+let PIANO_WIDTH;
 
 function createWhiteKeyBoard() {
     let notes = Object.keys(WHITE_FREQ);
@@ -34,7 +35,7 @@ function createBlackKeyBoard() {
     for (let i = 0; i < 7; i++) {
         if( i!= 2 && i!= 6 ) {
             let black = new BlackKeyBoard(
-                    windowWidth/6, 
+                    PIANO_WIDTH/3, 
                     windowHeight/16 + windowHeight/80  + i* windowHeight/8,
                     notes.shift()
                 );
@@ -52,13 +53,13 @@ class WhiteKeyBoard {
     
     show() {
         noFill();
-        rect(this.x, this.y, windowWidth/2, windowHeight/8);
+        rect(this.x, this.y, PIANO_WIDTH, windowHeight/8);
     }
 
     clicked(){
-        if (mouseX < windowWidth/6 && // 1/3 of the piano
+        if (mouseX < PIANO_WIDTH/3 && // 1/3 of the piano
             mouseX > this.x && 
-            mouseX < this.x + windowWidth/2 && 
+            mouseX < this.x + PIANO_WIDTH && 
             mouseY > this.y && 
             mouseY < this.y + windowHeight/8
         ) {
@@ -78,13 +79,13 @@ class BlackKeyBoard {
     
     show() {
         fill('black');
-        rect(this.x, this.y, windowWidth/3, windowHeight/10);
+        rect(this.x, this.y, PIANO_WIDTH*2/3, windowHeight/10);
     }
 
     clicked(){
-       if ( mouseX > windowWidth/6 && // 1/3 of the piano
+       if ( mouseX > PIANO_WIDTH/3 && // 1/3 of the piano
             mouseX > this.x &&
-            mouseX < this.x + windowWidth/3 && 
+            mouseX < this.x + PIANO_WIDTH*2/3 && 
             mouseY > this.y && 
             mouseY < this.y + windowHeight/10
         ) {
@@ -100,13 +101,14 @@ class BlackKeyBoard {
 function setup() {
     let cnv = createCanvas(windowWidth, windowHeight);
     
-    
-    getAudioContext().resume();
 
+    if(windowWidth < windowHeight) PIANO_WIDTH = windowWidth;
+    else PIANO_WIDTH = windowWidth/2;
+
+    getAudioContext().resume();
     createWhiteKeyBoard();
     createBlackKeyBoard();
 
-    
     cnv.mouseClicked(function() {
         osc.start();
         blackKeyBoards.forEach(black => {
@@ -129,7 +131,6 @@ function draw() {
     drawPiano();
     
 }
-
 
 function drawPiano() {
     whiteKeyBoards.forEach(whiteKeyBoard => {
