@@ -63,7 +63,7 @@ class WhiteKeyBoard {
             mouseY < this.y + windowHeight/8
         ) {
             osc.amp(20)
-            osc.freq(WHITE_FREQ[this.note], 0.5);
+            osc.freq(WHITE_FREQ[this.note]);
             console.log(this.note, WHITE_FREQ[this.note]);
         }
     }
@@ -89,7 +89,7 @@ class BlackKeyBoard {
             mouseY < this.y + windowHeight/10
         ) {
             osc.amp(20)
-            osc.freq(BLACK_FREQ[this.note], 1);
+            osc.freq(BLACK_FREQ[this.note]);
             console.log(this.note, BLACK_FREQ[this.note]);
         }
     }
@@ -115,7 +115,7 @@ function setup() {
         whiteKeyBoards.forEach(white => {
             white.clicked();
         });
-        osc.amp(0, 0.5);
+        osc.stop(0.2);
     });
 
 };
