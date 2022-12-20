@@ -49,6 +49,7 @@ class WhiteKeyBoard {
         this.x = x;
         this.y = y;
         this.note = note
+        this.osc = new p5.Oscillator('sine');
     }
     
     show() {
@@ -68,6 +69,23 @@ class WhiteKeyBoard {
             console.log(this.note, WHITE_FREQ[this.note]);
         }
     }
+
+    touched(){
+        touches.forEach(touch => {
+            if ( touch.x < PIANO_WIDTH/3 && // 1/3 of the piano
+                touch.x > this.x && 
+                touch.x < this.x + PIANO_WIDTH && 
+                touch.y > this.y && 
+                touch.y < this.y + windowHeight/8
+            ) {
+                this.osc.start();
+                this.osc.amp(20)
+                this.osc.freq(WHITE_FREQ[this.note]);
+                console.log(this.note, WHITE_FREQ[this.note]);
+                this.osc.stop(0.2)
+            }
+        });
+    }
 }
 
 class BlackKeyBoard {
@@ -75,6 +93,8 @@ class BlackKeyBoard {
         this.x = x;
         this.y = y;
         this.note=note
+        this.osc = new p5.Oscillator('sine');
+
     }
     
     show() {
@@ -95,12 +115,28 @@ class BlackKeyBoard {
         }
     }
 
+    touched(){
+        touches.forEach(touch => {
+            if ( touch.x > PIANO_WIDTH/3 && // 1/3 of the piano
+                touch.x > this.x &&
+                touch.x < this.x + PIANO_WIDTH*2/3 && 
+                touch.y > this.y && 
+                touch.y < this.y + windowHeight/10
+            ) {
+                this.osc.start();
+                this.osc.amp(20)
+                this.osc.freq(BLACK_FREQ[this.note]);
+                console.log(this.note, BLACK_FREQ[this.note]);
+                this.osc.stop(0.2)
+            }
+        });
+    }
+
 }
 
 
 function setup() {
     let cnv = createCanvas(windowWidth, windowHeight);
-    
 
     if(windowWidth < windowHeight) PIANO_WIDTH = windowWidth;
     else PIANO_WIDTH = windowWidth/2;
@@ -109,18 +145,18 @@ function setup() {
     createWhiteKeyBoard();
     createBlackKeyBoard();
 
-    cnv.mouseClicked(function() {
-        osc.start();
-        blackKeyBoards.forEach(black => {
-            black.clicked();
-        });
-        whiteKeyBoards.forEach(white => {
-            white.clicked();
-        });
-        osc.stop(0.2);
-    });
-
 };
+
+function touchStarted() {
+    blackKeyBoards.forEach(black => {
+        black.touched();
+    });
+    whiteKeyBoards.forEach(white => {
+        white.touched();
+    });
+}
+
+
 
 
 function windowResized() {
