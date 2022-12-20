@@ -57,19 +57,6 @@ class WhiteKeyBoard {
         rect(this.x, this.y, PIANO_WIDTH, windowHeight/8);
     }
 
-    clicked(){
-        if (mouseX < PIANO_WIDTH/3 && // 1/3 of the piano
-            mouseX > this.x && 
-            mouseX < this.x + PIANO_WIDTH && 
-            mouseY > this.y && 
-            mouseY < this.y + windowHeight/8
-        ) {
-            osc.amp(20)
-            osc.freq(WHITE_FREQ[this.note]);
-            console.log(this.note, WHITE_FREQ[this.note]);
-        }
-    }
-
     touched(){
         touches.forEach(touch => {
             if ( touch.x < PIANO_WIDTH/3 && // 1/3 of the piano
@@ -100,19 +87,6 @@ class BlackKeyBoard {
     show() {
         fill('black');
         rect(this.x, this.y, PIANO_WIDTH*2/3, windowHeight/10);
-    }
-
-    clicked(){
-       if ( mouseX > PIANO_WIDTH/3 && // 1/3 of the piano
-            mouseX > this.x &&
-            mouseX < this.x + PIANO_WIDTH*2/3 && 
-            mouseY > this.y && 
-            mouseY < this.y + windowHeight/10
-        ) {
-            osc.amp(20)
-            osc.freq(BLACK_FREQ[this.note]);
-            console.log(this.note, BLACK_FREQ[this.note]);
-        }
     }
 
     touched(){
