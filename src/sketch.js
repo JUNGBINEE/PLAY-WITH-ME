@@ -17,6 +17,8 @@ const BLACK_FREQ={
     'A#':466,
 }
 
+let r, g, b;
+let slider;
 let whiteKeyBoards = [];
 let blackKeyBoards = [];
 let osc = new p5.Oscillator('sine');
@@ -66,10 +68,10 @@ class WhiteKeyBoard {
                 touch.y < this.y + windowHeight/8
             ) {
                 this.osc.start();
-                this.osc.amp(20)
+                this.osc.amp(slider.value())
                 this.osc.freq(WHITE_FREQ[this.note]);
                 console.log(this.note, WHITE_FREQ[this.note]);
-                this.osc.stop(0.2)
+                this.osc.stop(0.3);
             }
         });
     }
@@ -98,10 +100,10 @@ class BlackKeyBoard {
                 touch.y < this.y + windowHeight/10
             ) {
                 this.osc.start();
-                this.osc.amp(20)
+                this.osc.amp(slider.value())
                 this.osc.freq(BLACK_FREQ[this.note]);
                 console.log(this.note, BLACK_FREQ[this.note]);
-                this.osc.stop(0.2)
+                this.osc.stop(0.3);
             }
         });
     }
@@ -118,8 +120,12 @@ function setup() {
     getAudioContext().resume();
     createWhiteKeyBoard();
     createBlackKeyBoard();
+  
+    slider = createSlider ( 0, 1, 0.2, 0.01);
+    slider.style('width', '300px');  
 
-};
+
+}
 
 function touchStarted() {
     blackKeyBoards.forEach(black => {
@@ -151,4 +157,9 @@ function drawPiano() {
     });
 }
 
-
+function deviceMoved() {
+  r = map(accelerationX, -90, 90, 0, 255);
+  g = map(accelerationY, -90, 90, 0, 255);
+  b = map(accelerationZ, -90, 90, 0, 255);
+  background(r,g,b);
+}
